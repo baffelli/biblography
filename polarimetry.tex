@@ -1,0 +1,838 @@
+\documentclass[11pt]{article}
+%Gummi|063|=)
+\title{\textbf{Polarimetry: some notes}}
+\author{Simone Baffelli}
+\date{}
+
+
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array} 
+\usepackage{rotating}
+\usepackage[section]{placeins}
+\usepackage{cite}
+\usepackage{macros}
+\usepackage{longtable}
+%%%%%%%%%%%Commands
+
+\begin{document}
+
+\maketitle
+
+\section{Disclaimer}
+The author of this summary does not guarantee the correctness of its contents.
+Most of the content of this collection of notes is based on "Polarimetric Radar Imaging" by Lee and Pottier\cite{Lee2009}. 
+\section{Polarimetric Calculus}
+\subsection{Jones Formalism}
+When we represent a plane wave propagating in a certain direction, we can define a coordinate system such that the wavevector $\mathbf{k}$ points in the $z$ direction. In this case, the electric field can be expressed as:
+\begin{equation}
+	\mathbf{\underline{E}}\left(z\right) = \mathbf{E}_{0} e^{-\alpha z}e^{-\jmath \beta z}
+\end{equation}
+notice that the time dependence was left out of this expression for brevity.
+In time domain, this can be rewritten as:
+\begin{equation}
+	\label{eq:e_field}
+	\begin{bmatrix}
+		E_{0x} e^{-\alpha z}\cos{\left(\omega t -  kz + \delta_{x}\right)} \\
+		E_{0y} e^{-\alpha z}\cos{\left(\omega t -  kz + \delta_{y}\right)}\\
+		0
+	\end{bmatrix}
+\end{equation}
+notice that the attenuation $\alpha$ is the same for all polarisation directions.
+Now, we can rewrite equation \ref{eq:e_field} in a more elegant form:
+\begin{equation}
+	\mathbf{\underline{E}}\left(z, t\right) = \begin{bmatrix}
+		E_{0x} e^{\jmath\delta_{x}} \\
+		E_{0y} e^{\jmath\delta_{y}} \\
+	\end{bmatrix} e^{\jmath k z} e^{\jmath \omega t} = \mathbf{\underline{E}}\left(z\right) e^{\jmath \omega t}
+\end{equation}
+The Jones vector is defined from the complex electric field vector $\mathbf{\underline{E}}\left(z\right)$ as:
+\begin{equation}
+	\mathbf{\underline{E}}\left(z\right)\bigr|_{z=0} = 
+	 \begin{bmatrix}
+		E_{0x} e^{\jmath\delta_{x}} \\
+		E_{0y} e^{\jmath\delta_{y}} \\
+	\end{bmatrix}.
+\end{equation}
+Using the Jones vector, we can easily represent the polarization state of the wave. It is common to normalize the Jones vector to $1$.
+The Jones vector can be parametrized in terms of the polarization ellipse orientation and ellipticity as:
+\begin{equation}
+	\mathbf{\underline{E}} = A e^{j\alpha}
+	\begin{bmatrix}
+		\cos\phi\cos\tau - \jmath \sin\phi\sin\tau \\
+		\sin\phi\cos\tau + \jmath \cos\phi\sin\tau
+	\end{bmatrix}.
+\end{equation}
+This can be written in matrix-vector form as:
+\begin{equation}
+	\mathbf{\underline{E}} = A e^{j\alpha}
+	\begin{bmatrix}
+		\cos\phi &	-\sin\phi \\
+		\sin\phi &	\cos\phi
+	\end{bmatrix}
+	\begin{bmatrix}
+		\cos\tau\\
+		\jmath\sin\tau
+	\end{bmatrix}
+\end{equation}
+\begin{table}
+	\centering
+	\begin{tabular}{lccc}
+		Polarization State & Unit Jones Vector & $\phi$ & $\tau$\\
+		\hline				\\
+		H & $\begin{bmatrix}1 \\ 0 \end{bmatrix}$ & 0 & 0 \\
+		\addlinespace[1.5ex]
+		V & $\begin{bmatrix}0 \\ 1 \end{bmatrix}$ & $\frac{\pi}{2}$ & 0 \\
+		\addlinespace[1.5ex]
+		Linear $+45^{\circ}$ & $\begin{bmatrix}\frac{1}{\sqrt{2}} \\ \frac{1}{\sqrt{2}} \end{bmatrix}$	
+		& $\frac{\pi}{4}$ & 0\\
+		\addlinespace[1.5ex]
+		Linear $-45^{\circ}$ & $\begin{bmatrix}\frac{1}{\sqrt{2}} \\ -\frac{1}{\sqrt{2}} \end{bmatrix}$	
+		& $-\frac{\pi}{4}$ & 0\\
+		Left Circular & $\frac{1}{\sqrt{2}}\begin{bmatrix}1 \\ \jmath \end{bmatrix}$ & any & $\frac{\pi}{4}$\\
+		\addlinespace[1.5ex]
+		Right Circular & $\frac{1}{\sqrt{2}}\begin{bmatrix}1 \\ -\jmath \end{bmatrix}$ & any & $-\frac{\pi}{4}$\\
+		\addlinespace[1.5ex]
+		\hline
+	\end{tabular}
+	\caption{Most common polarization states described in the Jones notation}
+\end{table}
+The Jones notation is particularly useful to represent a cascade of optically active elements, as the output polarization state is given by multiplying the matrix describing the system with the input Jones vector.\\
+Using the SU(2) group it is possible to define a polarization algebra. Starting from the unitary Pauli matrices $\boldsymbol\sigma_{p}$:
+\begin{equation}
+	\sigma_{0}=\begin{bmatrix}1 & 0 \\ 0 & 1\end{bmatrix},
+	\sigma_{1}=\begin{bmatrix}1 & 0 \\ 0 & -1\end{bmatrix},
+	\sigma_{2}=\begin{bmatrix}0 & 1 \\ 1 & 0\end{bmatrix},
+	\sigma_{3}=\begin{bmatrix}0 & -\jmath \\ \jmath & 0\end{bmatrix},
+\end{equation}
+the SU(2) group is defined as:
+\begin{equation}
+	\mathbf{A} = e^{\jmath\phi \boldsymbol\sigma_{p}} = \cos\phi\boldsymbol\sigma_{p} + \jmath \sin\phi\boldsymbol\sigma_{p}
+\end{equation}
+This allows us to represent the Jones vector as the action of the SU group on a horizontally polarized unit Jones vector $\mathbf{\hat{u}}_{H}$
+\begin{equation}
+	\begin{split}
+		\mathbf{\underline{E}} &= A e^{\jmath \alpha}
+		\begin{bmatrix}
+			\cos\phi &	-\sin\phi \\
+			\sin\phi &	\cos\phi
+		\end{bmatrix}
+		\begin{bmatrix}
+			\cos\tau\\
+			\jmath\sin\tau
+		\end{bmatrix}\\
+		&=
+		A e^{\jmath \alpha}
+		\begin{bmatrix}
+			\cos\phi &	-\sin\phi \\
+			\sin\phi &	\cos\phi
+		\end{bmatrix}
+		\begin{bmatrix}
+			\cos\tau & \jmath\sin\tau\\
+			\jmath\sin\tau & \cos\tau
+		\end{bmatrix}
+		\begin{bmatrix}
+		1\\
+		0
+		\end{bmatrix}\\
+		&=
+		A 
+		\begin{bmatrix}
+			\cos\phi &	-\sin\phi \\
+			\sin\phi &	\cos\phi
+		\end{bmatrix}
+		\begin{bmatrix}
+			\cos\tau & \jmath\sin\tau\\
+			\jmath\sin\tau & \cos\tau
+		\end{bmatrix}
+		\begin{bmatrix}
+		e^{\jmath\alpha} & 0 \\
+		0 & e^{\jmath\alpha}
+		\end{bmatrix}
+		\begin{bmatrix}
+		1\\
+		0
+		\end{bmatrix}\\
+		&= A \mathbf{U}_{2}\left(\phi\right) \mathbf{U}_{2}\left(\theta\right)\mathbf{U}_{2}\left(\alpha\right)\mathbf{\hat{x}}\\
+		&=A e^{-\jmath\phi\boldsymbol\sigma_{3}}e^{-\jmath\theta\boldsymbol\sigma_{2}}e^{-\jmath\alpha\boldsymbol\sigma_{1}}\mathbf{\hat{x}}
+	\end{split}
+\end{equation}
+where $\mathbf{\hat{x}} = \mathbf{\hat{u}}_{H}$ is the unit Jones vector representing the horizontal polarization state.
+\subsection{Polarization Ratio Representation}
+An interesting way of representing a polarized wave is to use the complex polarization ration $\rho_{AB}$ defined in the polarimetric basis $AB$ defined as:
+\begin{equation}
+	\rho_{AB} = \frac{E_{B}}{E_{A}} = \frac{\abs{E_{B}}}{\abs{E_{A}}}e^{\jmath\left(\phi_B - \phi_B\right)}
+\end{equation}
+using this ratio, we can represent the Jones vector as:
+\begin{equation}
+	\mathbf{E}_{AB} = \abs{E} e^{\jmath\phi_{A}} \frac{1}{\sqrt{1 + \rho_{AB}\rho_{AB}^{*}}}
+	 \begin{bmatrix}1\\\rho_{AB}\end{bmatrix}
+\end{equation}.
+If we discard the absolute phase and the amplitude, we can represent the polarization vector as:
+\begin{equation}
+	\mathbf{E}_{AB} =  \frac{1}{\sqrt{1 + \rho_{AB}\rho_{AB}^{*}}}
+	 \begin{bmatrix}1\\\rho_{AB}\end{bmatrix}
+\end{equation}.
+It is very important to keep in mind that the polarization ratio representation depends on the choice of the polarization basis. 
+If we consider the linear polarisation ratio in the linear basis (HV), we can write:
+\begin{equation}
+	\rho_{HV} = \frac{E_{V}}{E_{H}} = \frac{\abs{E_{V}}}{\abs{E_{H}}}
+	e^{\jmath\left(\phi_{V} - \phi_{H}\right)} =
+	\tan{\gamma_{HV}}e^{\jmath\left(\phi_{HV}\right)}
+\end{equation}
+where the angle $\gamma_{HV}$ is the angle of the vector with components $\abs{E_{H}}$ and $\abs{E_{V}}$
+\subsection{Stokes Formalism}
+If the polarization state of a wave is to be characterized by using real numbers only (this is the case of a noncoherent radar system), another formalism is needed, the so called \emph{Stokes Vector}.
+To start, consider the outer product of the Jones vector $\mathbf{\underline{E}}$: 
+\begin{equation}
+	\mathbf{\underline{E}} \mathbf{\underline{E}}^{H} = 
+	\begin{bmatrix}
+		E_{x} E_{x}^{*} & E_{x} E_{y}^{*} \\
+		E_{y} E_{x}^{*} & E_{y} E_{y}^{*} \\
+	\end{bmatrix}
+\end{equation}
+using the Pauli matrices, we vectorize this expression as
+\begin{equation}
+	\frac{1}{2}\left(g_{0}\boldsymbol\sigma_{0}+g_{1}\boldsymbol\sigma_{1}+g_{2}\boldsymbol\sigma_{2}+
+	g_{3}\boldsymbol\sigma_{3}
+	\right).
+\end{equation}
+The Stokes vector is then defined as:
+\begin{equation}
+	\begin{split}
+		\mathbf{\underline{g}}_{\mathbf{\underline{E}}} &= \begin{bmatrix}g_{0}\\g_{1}\\g_{2}\\g_{3}\end{bmatrix}
+		=
+		\begin{bmatrix}
+		E_{x} E_{x}^{*} + E_{y} E_{y}^{*} \\
+		E_{x} E_{x}^{*} - E_{y} E_{y}^{*} \\
+		E_{x} E_{y}^{*} + E_{y} E_{x}^{*} \\
+		\jmath\left(E_{x} E_{y}^{*} - E_{y} E_{x}^{*}\right) \\
+		\end{bmatrix}\\
+		&=
+		\begin{bmatrix}
+			\abs{E_{x}}^{2} + \abs{E_{y}}^{2}\\
+			\abs{E_{x}}^{2} - \abs{E_{y}}^{2}\\
+			2\mathrm{Re}\left(E_{x}E_{y}^{*}\right)\\
+			-2\mathrm{Im}\left(E_{x}E_{y}^{*}\right)
+		\end{bmatrix}.
+	\end{split}
+\end{equation}
+In addition, the following relation holds:
+\begin{equation}
+	g_{0}^{2} = g_{1}^{2} + g_{2}^{2} + g_{3}^{2}.
+\end{equation}
+Therefore, $g_{0}$ is equal to the total power of the wave, $g_{1}$ is the power in the vertically or horizontally polarized components, $g_{2}$ is the power in the linearly polarized components at tilt angles of $45^{\circ}$ and $135^{\circ}$ and $g_{3}$ is the power in the left and right handed circular polarization components. 
+The Stokes vector can be parametrized in terms of the parameters of the polarization ellipse as:
+\begin{equation}
+	\mathbf{\underline{g}}_{\mathbf{\underline{E}}} = 
+	\begin{bmatrix}
+		A^{2}\\
+		A^{2}\cos\left(2\phi\right)\cos\left(2\tau\right)\\
+		A^{2}\sin\left(2\phi\right)\cos\left(2\tau\right)\\
+		-A^{2}\cos\left(2\tau\right)
+	\end{bmatrix}
+\end{equation}
+As we did for the Jones vector, we want to investigate another way of representing the Stokes parameters. To do so, we will make use of another special unitary group, the O(3) group of real orthogonal matrices. There is an homomorphism connecting the elements of O(3) and the elements of SU(2). In short, this means that any transformation applied on the Jones vector can be unambiguously represented on the Poincaré sphere as three rotations applied on the Stokes vector.
+\section{Wave Covariance}
+When we measure the averaged returns from a set of single scatterers, such as when the radar platform moves during the acquisition, the scattered returns will not be coherent and completely polarized. To describe such a wave, we need to investigate the second order statistics of the Jones vector. This is the covariance matrix $\mathbf{J}$ of the Jones vector, also called the \emph{Wolf} coherency matrix.
+\begin{equation}
+	\begin{split}
+		\mathbf{J} &= 
+		\avg{\mathbf{\underline{E}} \mathbf{\underline{E}}^{H}} =
+		\begin{bmatrix}
+			\avg{E_{x}E_{x}^{*}} & \avg{E_{x}E_{y}^{*}} \\
+			\avg{E_{y}E_{x}^{*}} & \avg{E_{y}E_{y}^{*}} \\
+		\end{bmatrix} \\
+		&=
+		\frac{1}{2}
+		\begin{bmatrix}
+			\avg{g_{0}} + \avg{g_{1}} & \avg{g_{2}} - \jmath\avg{g_{3}}\\
+			\avg{g_{2}} + \jmath\avg{g_{3}} & \avg{g_{0}} - \jmath\avg{g_{1}}
+		\end{bmatrix}
+	\end{split}
+\end{equation}
+Since $\mathbf{J}$ is a complex Hermitian positive semidefinite matrix, it follows 
+$\avg{g_{0}}^{2} \geq \avg{g_{1}}^{2} + \avg{g_{2}}^{2} + \avg{g_{3}}^{2}$. $\mathrm{Tr}\left(\mathbf{J}\right)$ is the total power of the wave. If $\avg{J_{xy}} = 0$ the components $E_{x}$ and $E_{y}$ are uncorrelated and the wave is unpolarized. If $\abs{\mathbf{J}} = 0$, $\avg{J_{xx}}\avg{J_{yy}} = \abs{\avg{J_{xy}}}^2$ the components is maximum and the wave is completely polarized.
+For intermediate values of $\abs{\mathbf{J}}$, the wave is said to be partially polarized. This fact can be quantified by the degree of polarization DoP:
+\begin{equation}
+	\mathrm{DoP} = \frac{\sqrt{\avg{g_{1}}^2+\avg{g_{2}}^2+\avg{g_{3}}^2}}{\avg{g_{0}}} 
+	= \sqrt{1 - \frac{\abs{\mathbf{J}}}{\mathrm{Tr}\left(\mathbf{J}\right)}}
+\end{equation}
+Since trace and determinant of a Hermitian matrix are invariant under similarity transformation means that the degree of polarization is independent on the polarization basis chosen to represent $\mathbf{J}$.
+\section{Wave Entropy}
+The eigenvalues and eigenvector of $\mathbf{J}$ can be used to diagonalize the the covariance matrix. This diagonal form can
+be considered as a decomposition of the wave into two statistically independent wave component. In this case, $\mathbf{J}$ may be written as:
+\begin{equation}
+	\mathbf{J} = \lambda_{1}\mathbf{\underline{u}}_{1}\mathbf{\underline{u}_{1}}^{H} + 
+				\lambda_{2}\mathbf{\underline{u}}_{2}\mathbf{\underline{u}_{2}}^{H}
+\end{equation}
+using the eigenvalues, we can define two quantities, the wave entropy ($H_{w}$) and the wave anisotropy  ($A_{w}$):
+\begin{equation}
+	A_{w} = \frac{\lambda_{1} - \lambda_{2}}{\lambda{1} + \lambda{2}}\quad H_{w} = -\sum_{i=1}^{2}p_{i}\log_{2}{p_{i}}.
+\end{equation}
+The combination of values of entropy and anisotropy and their interpretation are summarized in table~\ref{tb:entropyW}.
+\begin{table}[b]
+	\centering
+	\begin{tabular}{cccccc}
+		\hline
+		$\lambda_{1}$ & $\lambda_{2}$ & $H_{w}$ & $A_{w}$ & DoP\\
+		$\lambda_{1} \geq 0$ & $0$ & $0$ & $1$ & $1$\\
+		$\neq \lambda_{2}$ & $\lambda_{2}\geq 0$ & $\between{0}{H_{w}}{1}$ & $\between{0}{A_{w}}{1}$ & $\between{0}{\mathrm{DoP}}{1}$	\\
+		\multicolumn{2}{c}{$\lambda_{1} = \lambda_{2}$} & 1 & 0 & 0\\
+		\hline
+	\end{tabular}
+	\caption{Three most important combinations of eigenvalues: polarized, partially polarized and unpolarized wave}
+	\label{tb:entropyW}
+\end{table}
+The diagonalization of the matrix can be expressed as:
+\begin{equation}
+	\mathbf{J} = \left(\lambda_{1} - \lambda_{2}\right)\mathbf{\underline{u}}_{1}\mathbf{\underline{u}_{1}}^{H} + 
+				\lambda_{2}\mathbf{I}_{2} = \mathbf{J}_{CP} + \mathbf{J}_{CD}.
+\end{equation}
+Which means that the covariance matrix can be decomposed in two matrices, one corresponding to a completely polarized and the other to a completely depolarized wave. In terms of the Stokes vector, this can be stated as:
+\begin{equation}
+	\begin{split}
+	\compmat{g} &= 
+	\begin{bmatrix}
+		\avg{g_{0}}\\
+		\avg{g_{1}}\\
+		\avg{g_{2}}\\
+		\avg{g_{3}}
+	\end{bmatrix}
+	=
+	\begin{bmatrix}
+		\sqrt{\avg{g_{1}}^2 + \avg{g_{2}}^2 + \avg{g_{3}}^2} \\
+		\avg{g_{1}}\\
+		\avg{g_{2}}\\
+		\avg{g_{3}}
+	\end{bmatrix}
+	+
+	\begin{bmatrix}
+		\avg{g_{0}} - \sqrt{\avg{g_{1}}^2 + \avg{g_{2}}^2 + \avg{g_{3}}^2} \\
+		0\\
+		0\\
+		0\\
+	\end{bmatrix}\\
+	&=
+	\compmat{g}_{CP} + \compmat{g}_{CD}
+	\end{split}
+\end{equation}
+\section{Polarized Wave Scattering}
+We now want to investigate the interaction of a electromagnetic wave with a target. 
+\subsection{Jones Formalism: Scattering Matrix}
+To start, we want to investigate the relation between the incident and the scattered Jones vector of the wave. Generally, in the far field\footnote{When discussing radar systems, we can almost always assume to be in the far field region}, this relation can be expressed in a very elegant way as a vector-matrix operation:
+\begin{equation}
+	\compmat{E}_{s} = \frac{e^{-\jmath k r}}{r}
+	\begin{bmatrix}
+		S_{11} & S_{12}\\
+		S_{21} & S_{22}
+	\end{bmatrix}
+	\compmat{E}_{i}
+\end{equation}
+If we consider a monostatic radar measuring the backscatter, the incident and the scattering Jones vector are expressed in the same orthogonal basis. For convenience, we usually choose the horizontal-vertical $\left(\hat{\mathbf{u}}_{h},\hat{\mathbf{u}}_v\right)$ basis. In this case the scattering matrix $\mathbf{S}$ becomes:
+\begin{equation}
+	\begin{bmatrix}
+		S_{HH} & S_{HV}\\
+		S_{VH} & S_{VV}
+	\end{bmatrix}
+\end{equation}
+ which can be rewritten by factoring out an absolute phase term and considering reciprocity:
+ \begin{equation}
+ 	\mathbf{S} = e^{\jmath \phi_{HH}}
+ 	\begin{bmatrix}
+ 		\abs{S_{HH}} & \abs{S_{HV}}e^{\jmath \left(\phi_{HV} - \phi_{HH}\right)}\\
+		\abs{S_{HV}}e^{\jmath \left(\phi_{HV} - \phi_{HH}\right)} 
+		& \abs{S_{VV}}e^{\jmath \left(\phi_{VV} - \phi_{HH}\right)}
+	\end{bmatrix}
+ \end{equation}
+ In the backscatter case, we usually express $\jmath{S}$ in the back scattering alignment system. In this system, the local coordinate system of transmitting and receiving antennas coincide and are given by a right handed system with the $z$ direction pointing at the scatterer. The scatterer coordinate system is defined having a $z$ direction pointing at the receiver.\\
+A description of $\mathbf{S}$ more suited to extract information is obtained by vectorizing the Sinclair matrix:
+\begin{equation}
+	\compmat{k} = \frac{1}{2}\mathrm{Tr}\left(S\boldsymbol\psi\right)
+\end{equation}
+where $\boldsymbol\psi$ is a complete set of complex basis matrices. In the monostatic scattering case, the target vector is a 3D vector and a suitable basis is given by the Pauli spin matrices $\left\{\psi_{p}\right\}$. This choice of basis results in the Pauli feature vector:
+\begin{equation}
+	\compmat{k} = \frac{1}{\sqrt{2}}
+	\begin{bmatrix}
+		S_{xx} + S_{yy} & S_{xx} - S_{yy} & 2 S_{xy}
+	\end{bmatrix}.
+\end{equation}
+Another representation is obtained by choosing the Lexicographic basis set $\psi_{l}$, in this case the  feature vector is represented as:
+\begin{equation}
+	\compmat{\Omega} = \frac{1}{\sqrt{2}}
+	\begin{bmatrix}
+		S_{xx} & \sqrt{2} S_{xy} & S_{yy}
+	\end{bmatrix}.
+\end{equation}
+For the case of distributed targets, it is more useful to consider the second moments of the feature vectors averaged over space or time. 
+\begin{equation}
+	\begin{split}
+		T_{3} &= \avg{\compmat{k}\compmat{k}^{H}}\\
+		C_{3} &= \avg{\compmat{\Omega}\compmat{\Omega}^{H}}
+	\end{split}.
+\end{equation}
+Both matrices are positive semidefinite and have the same trace, which is equal to the Frobenius norm of $\mathbf{S}$.\\
+Let us now consider some scattering symmetries and how they influence the form of the coherency matrix.
+\begin{table}[b]
+	\centering
+	\begin{tabular}{ccc}
+		\hline
+		Symmetry & $\mathbf{T}_{3}$ & Note \\
+		Reflection about LOS &
+		$\begin{bmatrix}
+			\abs{\alpha}^{2} & \alpha\beta^{*} & 0\\
+			\beta\alpha^{*} & \abs{\beta}^{2} & 0\\
+		\end{bmatrix}$ &
+		Co-pol uncor. to X-pol \\
+		Rotation about LOS&
+		$\frac{1}{2}\begin{bmatrix}
+			2\alpha & 0 & 0\\
+			0 & \beta + \gamma & -\jmath\left(\beta - \gamma\right)\\
+			0 & \left(\beta - \gamma\right) & \beta + \gamma
+		\end{bmatrix}$ &\\
+		Reflection and Rotation Symmetry &
+		$\begin{bmatrix}
+			2\alpha & 0 & 0\\
+			0 & \beta + \gamma & 0\\
+			0 & 0 & \beta + \gamma
+		\end{bmatrix}$ &\\
+	\end{tabular}
+\end{table}
+\FloatBarrier
+To conclude this chapter, a short list of elementary scatterers and their associated scattering matrices in the $H-V$ basis is presented.
+\begin{table}[hb]
+	\centering
+	\begin{tabular}{lcl}
+		\hline
+		Type & $\mathbf{S}$ & Commentary\\
+		Sphere, Flat Plate, Trihedral & 
+		$\begin{bmatrix}
+			1 & 0\\
+			0 & 1
+		\end{bmatrix}$\\\\
+		Horizontal Dipole & 
+		$\begin{bmatrix}
+			1 & 0\\
+			0 & 0
+		\end{bmatrix}$\\\\
+		Oriented Dipole &
+		$\begin{bmatrix}
+			\cos^{2}{\phi} & \frac{1}{2}\sin{2\phi}\\
+			\frac{1}{2}\cos{2\phi} & \sin^{2}{\phi}
+		\end{bmatrix}$\\\\
+		Oriented Dihedral &		
+		$\begin{bmatrix}
+			\cos{2\phi} & \sin{2\phi}\\
+			\sin{2\phi} & -\cos{2\phi}
+		\end{bmatrix}$\\\\
+		Bragg Surface &
+		$\begin{bmatrix}
+			R_{H} & 0\\
+			0 & R_{V}
+		\end{bmatrix}$\\
+	\end{tabular}
+\end{table}
+\FloatBarrier
+
+\subsection{Stokes Formalism: Mueller and Kennaugh Matrices}
+As we did before, we want to investigate a way to characterize the scattering process by using power measurements only; in addition we want to be able to characterize scattering processes where partial polarization is allowed. In order to do so, we need a relation between the Stokes vectors of the incident and of the scattered waves. This relation is expressed in a compact way by introducing the Kennaugh Matrix $\mathbf{K}$:
+\begin{equation}
+	\compmat{g}_{s} = \mathbf{K} \compmat{g}_{i}.
+\end{equation}
+Where the $\mathbf{K}$ matrix is computed as 
+\begin{equation}\label{eq:kennaugh}
+	\mathbf{K} = \mathbf{A}^{*}\left(\mathbf{S}\otimes\mathbf{S}^{*}\right)\mathbf{A}^{-1}.
+\end{equation}
+To explain this relation, consider the defining relation of the scattering matrix:
+\begin{equation}
+	\compmat{E}_{s} = \mathbf{S}\compmat{E}_{i}.
+\end{equation}
+Since the Stokes vector is defined in terms of intensities only, it is natural to convert the Jones vector of the scattered wave in a vector of intensities using the direct product as\cite{Fujiwara2007}:
+\begin{equation}
+	\begin{split}
+	\compmat{E}_{s}\otimes\compmat{E}_{s}^{*} &= \mathbf{S}\compmat{E}_{i}\otimes \mathbf{S}^{*}\compmat{E}_{i}^{*}\\
+	&= \left(\mathbf{S}\otimes\mathbf{S}^{*}\right)\left(\compmat{E}_{i}\otimes\compmat{E}_{i}^{*}\right).
+	\end{split}
+\end{equation}
+Now, the direct product of the Jones vector with itself reminds us of the outer product of the Jones vector we considered to arrive at the Stokes vector. In fact, using a simple linear transformation, we can convert the vector of intensities to the Stokes vector by using the transformation matrix $\mathbf{A}$:
+\begin{equation}
+	\mathbf{A} = 
+	\begin{bmatrix}
+		1 & 0 & 0 & 1\\
+		1 & 0 & 0 & -1\\
+		0 & 1 & 1 & 0\\
+		0 & \jmath & -\jmath & 0.
+	\end{bmatrix}
+\end{equation}
+Applying this transformation to the input and output Jones vectors, we finally arrive at the relation of equation~\ref{eq:kennaugh}.\\
+In the monostatic backscattering case, the Kennaugh matrix is symmetrical and in the pure target case it is related to the coherency matrix $\mathbf{T}_{3}$.
+The Kennaugh Matrix can be written in terms of the Huynen parameters in the following form:
+\begin{equation}
+	\begin{bmatrix}
+		A_{0} + B_{0} & C_{\psi} & H_{\psi} & F_{\psi} \\
+		C_{\psi} & A_{0} + B_{\psi} & E_{psi} & G_{\psi} \\
+		H_{\psi} & E_{\psi} & A_{0} - B_{\psi} & D_{\psi}\\
+		F_{\psi} & G_{\psi} & D_{\psi} & -A_{0} + B_{0}
+	\end{bmatrix}
+\end{equation}
+The index $\psi$ indicates that the parameters are dependent on the roll angle\footnote{Angle of rotation along the radar LOS, equivalent to the orientation or tilt angle of the polarimetric ellipse}.
+Using the Huynen the parameters, it is possible to determine the tilt angle and to eliminate its effect by a O(4) rotation of the Kennaugh matrix.
+In the case of a pure target (no temporal decorrelation, no fluctuations), the $\mathbf{K}$ and the $\mathbf{T}_{3}$ matrices are related as:
+\begin{equation}
+	\mathbf{T}_{3} = 
+	\begin{bmatrix}
+		2A_{0} & C - \jmath D & H + \jmath G\\
+		C + \jmath D & B_{0} + B & E + \jmath F\\
+		H - \jmath G & E - \jmath F & B_0 - B
+	\end{bmatrix}.
+\end{equation}
+The Huynen parameters can be understood in terms of target characteristics:
+\begin{itemize}
+	\item $A_{0}$ Total scattered power from regular, smooth and convex parts
+	\item $B_{0}$ Same for irregular, rough and depolarizing components
+	\item $A_{0} + B_{0}$ Total symmetric scattered power
+	\item $B_{0} + B$ Total symmetric or irregularly depolarized power
+	\item $B_{0} - B$ Total nonsymmetric depolarized power
+	\item $C, D$ symmetric target
+	\item 
+		\begin{itemize}
+			\item $C$ target global shape (linear)
+			\item $C$ target global shape (curvature)
+		\end{itemize} 
+	\item $E,F$ depolarization due to nonsymmetries
+	\item
+		\begin{itemize}
+			\item local twist (torsion)
+			\item global twist (helicity)
+		\end{itemize}
+	\item $G,H$ coupling terms
+	\item
+		\begin{itemize}
+			\item $G$, local coupling
+			\item $H$ global coupling
+		\end{itemize}
+\end{itemize}
+It is important to remark that the Huynen parameters do not have a two way relationship with the characteristics described above: the presence of a certain generator does not guarantee that a certain type of scatterer has been observed.
+\subsubsection{Bistatic Scattering}
+In the bistatic case, the $\mathbf{S}$ matrix is not symmetric when using the BSA convention. The matrix can be partitioned into a sum of two matrices , a symmetric one and a skew-symmetric one:
+\begin{equation}
+	\mathbf{S} = 
+	\begin{bmatrix}
+		S_{XX} & S_{XY}^{S} \\
+		S_{XY}^{S} & S_{XX}
+	\end{bmatrix} 
+	+	
+	\begin{bmatrix}
+		0 & S_{XY}^{SS} \\
+		S_{XY}^{SS} & 0
+	\end{bmatrix} 
+	=
+	\mathbf{S}^{S} + \mathbf{S}^{SS}
+\end{equation} 
+Therefore, the Kennaugh matrix can then be decomposed into three matrices as:
+\begin{equation}
+	\mathbf{K} = \mathbf{K}^{S} + \mathbf{K}^{C} + \mathbf{K}^{SS}
+\end{equation}
+where $\mathbf{K}^{S}$ is the symmetric Kennaugh Matrix corresponding to a monostatic configuration, $\mathbf{K}^{SS}$ is a diagonal matrix and $\mathbf{K}^{C}$ is a matrix associated to the coupling between the symmetric and the skew symmetric part.
+\subsection{Target Polarimetric Characterization}
+The voltage at the receiver induced by a scattered wave $\compmat{E}_{s}$ is defined by the effective antenna height $\hat{\mathbf{h}}\left(\theta,\phi\right)$\footnote{Antenna pattern} as:
+\begin{equation}
+	V = \mathbf{\hat{h}_{R}}^{T}\compmat{E}_{s} = \mathbf{\hat{h}_{R}}^{T}\mathbf{S}\mathbf{\hat{h}_{T}}
+\end{equation}
+the radar cross section is given by:
+\begin{equation}
+	\sigma_{RT} = VV^{*} = \abs{\mathbf{\hat{h}_{R}}^{T}\mathbf{S}\mathbf{\hat{h}_{T}}}^{2}
+\end{equation}
+and the received power $P_{T}^{R}$ is proportional to $\sigma_{RT}$. 
+\section{Polarization optimization}
+Consider the Jones vector represented in function of the polarization ratio as:
+\begin{equation}
+	\hat{\mathbf{h}_{T}} = \frac{e^{\jmath\xi}}{\sqrt{1+\abs{\rho}^{2}}}
+	\begin{bmatrix}
+		1\\
+		\rho
+	\end{bmatrix}.
+\end{equation}
+the corresponding orthogonal Jones vector is:
+\begin{equation}
+	\hat{\mathbf{h}_{{T}_{\perp}}} = \frac{e^{-\jmath\xi}}{\sqrt{1+\abs{\rho}^{2}}}
+	\begin{bmatrix}
+		-\rho^{*}\\
+		1
+	\end{bmatrix}.
+\end{equation}
+Using these two vectors, the copolar ($P_{CO} = P_{T}^{R=T}$) and the crosspolar ($P_{X} = P_{T}^{R=T_{\perp}}$) powers can be computed:
+\begin{equation}
+	\begin{split}
+	P_{CO} &\propto \abs{S_{XX} + 2\rho S_{XY} + \rho^{2} S_{YY}}^{2}\quad\mathrm{and}\\
+	P_{X} &\propto \abs{\rho^{*}S_{XX} + \left(1 - \abs{\rho}^2\right)S_{XY} + \rho S_{YY}}^{2}.
+	\end{split}
+\end{equation}
+Now, we consider:
+\begin{equation}
+	\deriv{P_{CO}}{\rho}=0\,\,\mathrm{and}\,\,\deriv{P_{X}}{\rho}=0.
+\end{equation}
+For $P_{CO}$ we have the following possible pairs of states as solutions
+\begin{table}[hb]
+	\centering
+	\begin{tabular}{lllll}
+		\hline\\
+		\multirow{2}{*}
+			{
+				\begin{sideways}$P_{CO}$\end{sideways}
+			}&
+		COPOL MAX & $P_{K}^{K}$ global max & $P_{L}^{L}$ local max & orthogonal\\
+		&COPOL NULLS & $P_{O_{1}}^{O_{1}} = 0$ & $P_{O_{2}}^{O_{2}} = 0$ & not orthogonal\\\\
+		\multirow{2}{*}
+			{
+				\begin{sideways}$P_{X}$\end{sideways}
+			}&
+		XPOL MAX & $P_{C_{1}}^{C_{1_{\perp}}}$ global max & $P_{C_{2}}^{C_{2_{\perp}}}$ local max & \\
+		&XPOL NULL & $P_{X_{1}}^{X_{1_{\perp}}}=0$  & $P_{X_{2}}^{X_{2_{\perp}}}=0$ & 
+	\end{tabular}
+\end{table}
+\
+\section{Coherent Decompositions}
+Recall the vectorization of $\mathbf{S}$ in some basis: the vectorization is obtained by stacking the coefficents of the expansion of $\mathbf{S}$ in a suitable basis for matrices. Now, if we consider the decomposition, we can write it in the form:
+\begin{equation}\label{eq:coherentDec}
+	\mathbf{S} = \sum\limits_{k = 1}^{N} c_{i}\mathbf{S}_{i}
+\end{equation}
+that is, we can decompose the scattering matrix of the target in a combination of primitive scattering matrices $\mathbf{S}_{i}$. This decomposition is a so-called \emph{coherent decomposition}. This kind of decomposition can only be applied to coherent scattering situations, where the wave is completely polarized. A target that scatters a fully polarized wave is known as a point target.\\
+\subsection{Pauli Decomposition}
+Consider now the decomposition as in equation~\ref{eq:coherentDec} performed using the Pauli matrices as basis:
+\begin{equation}
+	\mathbf{S} = 
+	\frac{a}{\sqrt{2}}
+	\begin{bmatrix}
+		1 & 0\\
+		0 & 1
+	\end{bmatrix}
+	+
+	\frac{b}{\sqrt{2}}
+	\begin{bmatrix}
+		1 & 0\\
+		0 & -1
+	\end{bmatrix}
+	+
+	\frac{c}{\sqrt{2}}
+	\begin{bmatrix}
+		0 & 1\\
+		1 & 0
+	\end{bmatrix}	
+	+
+	\frac{d}{\sqrt{2}}
+	\begin{bmatrix}
+		0 & -\jmath\\
+		\jmath & 0
+	\end{bmatrix}
+\end{equation}
+where the components $a,b,c,d$ are given by:
+\begin{equation}
+	a=\frac{S_{HH}+S_{VV}}{\sqrt{2}}\quad
+	b=\frac{S_{HH}-S_{VV}}{\sqrt{2}}\quad
+	c=\frac{S_{HV}+S_{VH}}{\sqrt{2}}\quad
+	d=\jmath\frac{S_{HV}-S_{VH}}{\sqrt{2}}\quad
+\end{equation}
+Where $a$ represents odd bounce scattering mechanisms, $b$ even bounce scattering, $c$ even bounce scattering from corners having a orientation of $45^{\circ}$ and $d$ represents the imbalance, non-reciprocity and the effect of a possibly bistatic observation.
+\subsection{Kroager Decomposition}
+\subsection{Hunyen Decomposition}
+An interesting parametrization of the Sinclair matrix\cite{huynen1970phenomenological} is obtained as:
+\begin{equation}
+	\mathbf{S} = \mathbf{R}\left(\phi_m\right) \mathbf{T}\left(\tau_m\right)
+		\mathbf{S}_d \mathbf{T}\left(-\tau_m\right) \mathbf{R}\left(-\phi_m\right) 
+\end{equation}
+where:
+\begin{equation}
+	\mathbf{R}\left(\phi_m\right) =
+	\begin{bmatrix}
+		\cos{\phi_m} & -\sin{\phi_m}\\
+		\sin{\phi_m} &  \cos{\phi_m}\\
+	\end{bmatrix}
+\end{equation}
+\begin{equation}
+	\mathbf{T}\left(\tau_m\right) =
+	\begin{bmatrix}
+		\cos{\tau_m} & -\jmath\sin{\tau_m}\\
+		-\jmath\sin{\tau_m} &  \cos{\tau_m}\\
+	\end{bmatrix}
+\end{equation}
+\begin{equation}
+	\mathbf{S}_{d} =
+	\begin{bmatrix}
+		m e^{\jmath\left(\nu + \zeta\right)} & 0\\
+		0 & m \tan\left(\gamma\right)e^{-\jmath\left(\nu - \zeta\right)} \\
+	\end{bmatrix}
+\end{equation}
+The parameters can be related to the Huynen phenomenological parameters of the target: $\phi_m$ is the target orientation angle, $\tau_m$ the ellipticity, $m$ the magnitude, $\nu$ the skip angle\footnote{relates to the number of bounces}, $\gamma$ the polarizability angle and $\zeta$ is the absolute phase.
+The matrix $\mathbf{S}_d$ can be interpreted as the scattering matrix of a symmetric target whose axis of symmetriy is oriented on the plane orthogonal to the LOS.
+The orientation angle $\theta_m$ represents the orientation of the target around the LOS, the ellipticity (helicity?) angle is nonzero for asymmetric targets and describes the asymmetry of the target. The hop or skip angle $\nu$ is related to the order of the scattering.  $\gamma$ is the characteristic or polarizability angle which gives information on the ability of the target to polarize unpolarized waves on a particular direction, finally, the magnitude $m$ is related to the total RCS of the target.
+\section{Incoherent Decompositions}
+\subsection{Eigendecomposition}
+Using the eigenvalues and eigenvector of $\mathbf{C}_{3}$ and $\mathbf{T}_{3}$, we can diagonalize the matrices. Since the coherency matrix and the covariance matrix are related by a special unitary transformation, we can conclude that both possess the same eigenvalues. If only one eigenvalue is nonzero, the matrices can be uniquely related to a pure target with a single scattering matrix. On the other hand, if all eigenvalues are approximatively equal, we have the case of a completely unpolarized wave.
+\subsection{ H-A-$\alpha$ Decomposition}  
+Eigenvalue decomposition of the averaged coherency matrix $\mathbf{T}_{3}$ with a unitary eigenvector matrix $\mathbf{U}_{3}$:
+\begin{equation}
+	\mathbf{T}_{3} = \mathbf{U}_{3} \mathbf{\Sigma} \mathbf{U}_{3}^{-1}.
+\end{equation}
+This decomposition can be represented as the decomposition of the coherency matrix into the sum of three uncorrelated targets, each represented by a scattering matrix $\mathbf{T}_{3i}$.
+If only one eigenvalue is nonzero, the coherency matrix corresponds to a single target that can be related to a single scattering vector $\compmat{k}$ using:
+\begin{equation}
+	\mathbf{T}_{3} = \compmat{k}_{1} \compmat{k}_{1}^{H}
+\end{equation}
+ In the other extreme case, when all three eigenvalue are equal, the coherency matrix is composed of equal orthogonal scattering mechanism and the target is random.\\
+In general, the columns of $\mathbf{U}_{3}$ are parametrized as:
+\begin{equation}
+	e = 
+	\begin{bmatrix}
+		\cos{\alpha} & \sin{\alpha}\cos{\beta}e^{\imath \delta} & \sin{\alpha}\sin{\beta}e^{\imath \gamma}
+	\end{bmatrix}
+\end{equation}
+This parametrization allows a probabilistic interpretation of the scattering process as a three symbol Bernoulli process, where three target mechanisms appear with pseudo probabilities given by the corresponding normalized eigenvalues. 
+It is particular interesting to extract parameters that are invariant to rotations around the line of sight (roll). The most immediate roll invariant parameter is clearly a function of the eigenvalues, since the eigenvalues are invariant to unitary transformation of the coherency matrix. Two examples are the eigenvalues themselves and the pseudo-probabilities obtained by computing the normalized eigenvalues.\\ Another set of roll invariant parameters is represented by the parameters $\alpha$ of the eigenvector parametrization. Therefore, the average $\overline{\alpha}$ angle is a roll invariant parameter too. 
+To analyze the parameter $\overline{\alpha}$, we consider the backscatter due to a cloud of anisotropic needles with a matrix $\mathbf{S}$:
+\begin{equation}
+	\mathbf{S} = 
+	\begin{bmatrix}
+		a & 0\\
+		0 & b
+	\end{bmatrix}
+\end{equation}
+The rotation about the LOS of the associated $\mathbf{T_{3}}$ matrix is obtained as:
+\begin{equation}
+	\mathbf{T}_{3}\left(\theta\right) = \mathbf{R}_{3}\left(\theta\right)
+	\begin{bmatrix}
+		\epsilon & \mu & 0\\
+		\mu^{*} & \nu  & 0\\
+		0 & 0 & 0
+	\end{bmatrix}
+	 \mathbf{R}_{3}\left(\theta\right)^{-1}
+\end{equation}
+If we average over all angles $\theta$ assuming a uniform distribution, we we obtain:
+\begin{equation}
+	\avg{\mathbf{T}_{3}}_{\theta} = \frac{1}{2} 
+	\begin{bmatrix}
+		2\epsilon & 0 & 0\\
+		0 & \nu & 0\\
+		0 & 0 & \nu
+	\end{bmatrix}.
+\end{equation}
+Obviously, the averaged coherency matrix is diagonal and the eigenvectors correspond to the columns of the identity matrix. The average alpha parameters is:
+\begin{equation}
+	\overline{\alpha} = \frac{\pi}{2} \left(P_{2} + P_{3}\right)\quad\, P_{2} = P_{3} = \frac{\nu}{\nu + \epsilon}
+\end{equation}
+\begin{itemize}
+	\item $a = b$, $\overline{\alpha} = 0$.\\ We have $\nu = 0$ and the first eigenvector occurs with probability one. This is a completely deterministic scattering. It appears in the case of single scattering from a random cloud of spherical objects or a surface scatterer.
+	\item $a = -b$, $\epsilon = 0$ and $\overline{\alpha} = \frac{\pi}{2}$.\\ This average scattering mechanism can be identified as a dihedral scattering with uniform distribution of rotation angles.
+	\item $a \gg b$ In this case the particles are highly anisotropic (e.g. dipole scattering) and $\overline{\alpha} = \frac{\pi}{4}$.
+\end{itemize}
+A third roll invariant parameter is defined using the Von Neumann entropy of the eigenvalues:
+\begin{equation}
+	H = - \sum_{k=1}^{N}P_{k}\log_{N}{\left(P_{k}\right)}.
+\end{equation}
+This parameters allows us to quantify the statistical disorder of the scattering mechanisms. If H is low, the scattering is weakly depolarizing and a dominant scattering mechanism can be identified. However, if the entropy is high, the averaged scattering is depolarizing and we cannot extract a equivalent point scatterer anymore. When $H =1$ measuring polarization does not give any useful information.\\
+ For single scatterers (low entropy H) we can use the following interpretation:
+ The orientation angle $\beta$ allows us to parametrize scatterers such as a tilted Bragg scatterer or a cloud of particles with a preferred orientation. The angle $\alpha$ gives us an indication on the kind of scatterers: for 0, we are observing a scattering from a surface, for 90 we observe dihedral scattering, a angle of 45 indicates dipole scattering. In the latter case, the $\beta$ angle indicates the orientation of the dipole.
+In general, for low entropies, we can identify three zones:
+\begin{itemize}
+	\item For $\alpha$ between 0 and 42.5, we have surface scattering and specular scattering which do not 	involve 180 phase change between the copol channels.
+\item For alpha around 45, we observe scattering mechanisms with strong correlation and large imbalances between HH and VV, such as dipole scattering and vegetation with oriented anisotropic scattering.
+\item When $\alpha$ is larger than 47.5, we observe even bounce multiple scattering such as metallic dihedral scatterers.
+\end{itemize}
+This classification does not hold when H is larger than 0.5, in this case we can distinguish several other zones.
+For H between 0.5 and 0.9, we can define three medium entropy scattering mechanisms:
+\begin{itemize}
+\item Medium entropy surface scattering, which represents the increase in entropy produced by scatterers with change in surface roughness and canopy propagation.  This type of surface scattering is located between low frequency (Bragg) and high frequency (geometrical) optics.
+\item $\alpha$ between 40 and 50. Medium entropy vegetation scattering. In this case, we have a predominant dipole type scattering, with a statistical distribution of orientation angles.
+\item Medium entropy multiple scattering. In this zone, we find dihedral scattering mechanisms with moderate entropy. This is observed in double bounce through forested areas, where the effect of double bounces is combined with propagation through a canopy. Another example are urban areas, where we have dense localized scatterers that can generate moderate entropy with dominant low order multiple scattering.
+\end{itemize}
+For H larger than  0.9, we can again observe three different zones:
+\begin{itemize}
+	\item High entropy surface scatter. This zone is not feasible: with increasing entropy, we are not able to classify scattering mechanisms. Polarimetry is of little use in high entropy cases.
+	\item High entropy vegetation scatter. This is due to single scattering from a cloud of anisotropic needles.
+	\item High entropy multiple scattering. In this case we can still distinguish double bounces in high entropy. Mainly observed forestry.
+\end{itemize}
+In general, single or low order scattering is observed with low entropy, the higher the order of scattering, the higher the entropy.
+
+
+\section{SAR Speckle}
+\subsection{Single Channel Specke}
+Speckle is due to the coherent addition of scatterers within a resolution cell. Using the Rayleigh speckle model, we first want to investigate the distribution of the complex pixels:\\
+if we assume a large number of scatterers per cell and surface which is much rougher than the wavelength used, the phase of the coherent vector sum of scatterers can be assumed to be uniformly distributed in the interval $\left]-\pi,\pi\right[$. By the Central Limit Theorem, the real and imaginary components of the sum are i.i.d Gaussian $\sim\mathcal{N}\left(0, 
+\frac{\sigma^{2}}{2}\right)$.
+It follows that the amplitude $A = \sqrt{x^{2}+y^{2}}$ will have a Rayleigh distribution and the intensity $I = A^{2}$ will have a exponential distribution:
+\begin{equation}
+	p_{I}\left(I\right) = \frac{1}{\sigma_{2}}e^{-\frac{I}{\sigma^{2}}}.
+\end{equation}
+It is important to note that the ratio of standard deviation to mean is constant. This motivates the name "multiplicative noise" for the speckle.\\
+In attempt to reduce speckle, it is interesting to average independent realization of the image (\emph{looks}). This can be accomplished by separately processing non-overlapping portion of the Doppler (azimuth) bandwidth, obtaining separate images and then incoherently averaging them. A almost equivalent way of obtaining this is to average neighboring pixels in azimuth, trading spatial resolution for radiometric resolution. Additional speckle reduction can be obtained by averaging pixels using a boxcar filter.\\
+A N-look intensity image is obtained as
+\begin{equation}
+	I_{N} = \frac{1}{N} \sum_{i=1}^{N} I_{1}\left(i\right) =  \frac{1}{N} \sum_{i=1}^{N} \left(x\left(i\right)^{2}+y\left(i\right)^{2}\right)
+\end{equation}
+Since $x\left(i\right)$ and $y\left(i\right)$ are Gaussian i.i.d, it follows that $NI_{N}$ has a $\chi^{2}$ distribution with $2N$ DOF.
+To obtain a N-look amplitude image we can either average N amplitude images or average N intensity images and take the square root. In the first case, we do not have a closed form for the PDF, which is obtained by the convolution of N Rayleigh distributions. In the second case, it is possible to obtain a closed form distribution. The relations between the various distributions is best summarized in the following table:
+\begin{table}[b]
+	\centering
+	\begin{tabular}{llcc}
+		\hline
+		Element & Distribution &  Mean & Variance\\
+		Complex Pixel & i.i.d Gaussian & 0     & $\frac{\sigma^{2}}{2}$\\
+		Amplitude & Rayleigh & $\sigma \frac{\sqrt{\pi}}{2}$ & $\left(4 - \pi\right)\frac{\sigma^{2}}{4}$\\
+		Intensity & Exponential & $\sigma^{2}$ & $\sigma^{4}$\\
+		N-look Intensity & Chi-squared & $\sigma^{2}$ & $\frac{\sigma^{2}}{4}$\\
+		N-look Amplitude & No closed form & $\sigma \frac{\sqrt{\pi}}{2}$ & $\frac{1}{\sqrt{N}}\left(4 - \pi\right)\frac{\sigma^{2}}{4}$\\
+		N-look Amplitude (from Intensity) & Chi & $\frac{\Gamma\left(N + \frac{1}{2}\right)}{\Gamma\left(N\right)}
+		\sqrt{\frac{\sigma^{2}}{N}}$ & 
+		$\left(N - \frac{\Gamma^{2}\left(N + \frac{1}{2}\right)}{\Gamma^{2}\left(N\right)}\right)\frac{\sigma^{2}}{N}$
+	\end{tabular}
+\end{table}
+\subsection{Polarimetric Speckle}
+In the case of polarimetric data, we cannot just analyze the amplitude of the pixels, we need to study the statistics of coherences and phases between the polarimetric channels. To do so, we start by analyzing the distribution of the target vector $\compmat{u}$. For reciprocal media and monostatic measurements, this vector is composed of three elements which represent the coordinates of the scattering matrix in the chosen polarimetric basis\footnote{Pauli, lexicographic or other}.
+In the case of nonreciprocal media or of bistatic systems, the vector is four dimensional because $S_{hv} \neq S_{vh}$. For a resolution cell containing many scatterers, $\compmat{u}$ can be modeled as a multivariate complex Gaussian vector:
+\begin{equation}
+	p_{\compmat{u}}\left(\compmat{u}\right) = \frac{1}{\pi^{n}\abs{\mathbf{C}}}e^{-\compmat{u}^{H}\mathbf{C}^{-1}\compmat{u}}
+\end{equation}
+where $\mathbf{C} = \expect{\compmat{u}\compmat{u}^{H}}$. Real and imaginary part of any pair of elements of $\compmat{u}$ are supposed to be circularly Gaussian distributed.
+In the case of multilook for speckle reduction, we cannot directly average the intensities of the complex elements of the complex image: this will not help us reduce the speckle, as it was the case for the single channel speckle. Therefore, we will consider the multilook covariance matrix $\mathbf{Z}$:
+\begin{equation}
+	\mathbf{Z} = \frac{1}{n}\sum\limits_{k=1}^{n}\compmat{u}\left(k\right)\compmat{u}\left(k\right)^{H}
+\end{equation}
+The multilook covariance matrix can be shown to follow a complex Wishart distribution\footnote{The Wishart distribution can be thought as the multivariate version of the chi-squared distribution}.\\
+If we are interested in the multilook phase difference, we will notice that multilook processing improves the polarimetric phase distribution: as we increase the number of looks, the phase distribution quickly becomes very narrow.\\
+It is important to remark that the multilook coherence estimator obtained as:
+\begin{equation}
+	\frac{\frac{1}{n}\abs{\sum\limits_{k=1}^{N}S_{1}\left(k\right)S_{2}\left(k\right)^{*}}}
+	{\sqrt{\expect{\abs{S_{1}}^2}\expect{\abs{S_{2}}^2}}}
+\end{equation}
+is biased and always overestimates the true coherence, especially for low values of the true coherence.
+\subsection{Speckle Noise Model}
+First, we need to remember that speckle is not a noise phenomenon by itself: it is due to a scattering process and it is theoretically perfectly reproducible. However, speckle can be very well characterized by using a multiplicative noise model. Multiplicative means that the local standard deviation of noise linearly increases with the local mean. We can describe the noise model very simply as:
+\begin{equation}
+	y\left(k,l\right) = x\left(k,l\right)v\left(k,l\right)
+\end{equation}
+where $y$ stands for the noisy pixels, $x$ is the ideal reflectance and $v$ is the multiplicative noise we assume to have $\expect{v\left(k,l\right)} = 1 $ and a standard deviation $\sigma_{v}$. Visually, this means that the speckle is stronger for brighter areas of the image.\\
+Under this model, the average image $\expect{y}$ is an unbiased estimate of the reflectance, as:
+\begin{equation}
+	\expect{y} = \expect{y}
+\end{equation}
+The variance of $y$ is:
+\begin{equation}
+	\mathrm{Var}\left(x\right) = \left(\mathrm{Var}\left(x\right)+\overline{x}^{2}\right)\sigma_{v}^{2} + \mathrm{Var}\left(x\right).
+\end{equation}
+For homogeneous areas, $\mathrm{Var}\left(x\right) = 0$ and the noise variance of the speckle noise is given as:
+\begin{equation}
+	\sigma_{v} = \frac{\sqrt{\mathrm{Var}\left(y\right)}}{\overline{y}}
+\end{equation}\\
+As stated previously, in the case of polarimetric data, if we are interested in speckle reduction by multilook processing, we need to average single look coherency\footnote{or covariance} matrices of neighboring pixels according to the following procedure. First, we compute the single look coherency matrix for the target vector at every image element:
+\begin{equation}
+	\mathbf{C} = \compmat{u}\compmat{u}^{H},
+\end{equation}
+then, we perform multilook processing by averaging neighboring single look pixels.
+\begin{equation}
+	\mathbf{Z} = \frac{1}{n}\sum\limits_{k=0}^{n}\mathbf{C}\left(k\right).
+\end{equation}
+This matrix can be characterized using a complex Wishart distribution. Depending on the choice of the target vector, the elements of the multilook matrix display a multiplicative noise behavior when the pixel standard deviation is plotted against the local mean. However, if the matrix entry contains cross channel terms, the noise process cannot be characterized as a multiplicative process anymore and must be regarded as a combination of additive and multiplicative noise.
+\bibliography{./Literature/literature}{}
+\bibliographystyle{ieeetran}
+\end{document}

@@ -1,0 +1,151 @@
+\documentclass[11pt]{article}
+%Gummi|063|=)
+\title{\textbf{A Short Review of Polarimetric Radar Calibration Techniques}}
+\author{Simone Baffelli}
+\date{}
+
+
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array} 
+\usepackage{fullpage}
+\usepackage{rotating}
+\usepackage[section]{placeins}
+\usepackage{cite}
+\usepackage{longtable}
+\usepackage{multirow}
+\usepackage{pdflscape} % or {lscape}
+\usepackage{longtable}
+\usepackage{macros}
+%%%%%%%%%%%Commands
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+
+\begin{document}
+\maketitle
+\subsection{Introduction}
+None of the methods described deals with the calibration of the absolute polarization phase. This phase is not of interest for most of the applications, where the phase relative to one polarization channel is usually sufficient.\\
+In general, any technique requiring a number of targets for calibration, requires the same targets to be placed at different range lines to compensate for the changes in scattering characteristics due to the changes in incidence angle. Calibration independently for each range line may compensate for the range varying phase due to the small baseline between the H and the V antennas\cite{1610834}.
+Therefore, the main disadvantage of calibration using artificial targets is the fact that targets must be precisely oriented and a large number of target (or multiple acquisitions) is required to cover the whole extent of the image. On the other hand, target based techniques allow a simultaneous polarimetric and radiometric calibration, whereas techniques based on image characteristics usually only allow a relative imbalance and crosstalk calibration. Some methods such\cite{VanZyl1990,Klein1992} try to combine both methods 
+\subsection{Literature Review of The Main Calibration Methods}
+\begin{landscape}
+\begin{longtable}{L{1cm}L{5cm}L{4cm}L{5cm}L{3cm}}
+	Ref. & Short Description & Advantages & Disadvantages & Magnitude error \\
+	\hline
+	\cite{Whitt1991} &
+	(GTCT) Represent the imbalance  in matrix form as a combination of linear transformations of the scattering matrix. Measure three different targets with known scattering matrix and use matrix algebra to invert the relation and estimate the parameters using a eigenvalue based approach. &
+	Imbalance is fully considered, no assumption on the form of distortion matrices. Calibration targets can have any scattering matrix provided that one is invertible. &
+	Does not calibrate absolute phase. Requires three different targets, one of which must have an invertible scattering matrix. For perfect calibration, needs target at each range line.
+	& 0.3 dB\\
+	\hline\\
+	\cite{Sarabandi1990} & (STCT) Simplified version of\cite{Whitt1991}. Antenna system with pol. channels modeled as passive four port. Assumes a single antenna system, with different imbalance on transmit and receive but with the same crosstalk in TX and RX. A single sphere or trihedral is sufficient to determine the scattering matrix.
+	& Only single target is needed. Direct solution avoids numerical problems
+	& Not adequate for multi-antenna/multistastic systems because of the reciprocal x-talk assumption. As always, calibration has to be repeated for different ranges.\\
+	\hline\\
+	\cite{45747}&
+	(IACT) Similar to \cite{Whitt1991}, using the assumption of perfect isolation ($r_{pq} =0$, $t_{pq} = 0$), calibration relative to one channel can be achieved by two target, one of which must have a significant cross-polarized component but whose scattering matrix is not needed to be known.&
+	 Simple, good for field calibration. Requires only one precise target.
+	& Does not improve the "natural" polarization isolation of the radar. In theory, targets are needed at every range line.
+	& 0.3 dB\\
+	\hline\\
+ 	\cite{VanZyl1990}&
+	 Model assumes symmetrized scattering matrices which imposes a reciprocal distortion model. Firstly, phase calibration according to\cite{Zebker1987} is performed. Assuming that co- and crosspolarization are uncorrelated and azimuthal symmetry, the cross-talk can be estimated from the image only, without using any known target, using an iterative procedure. The imbalance calibration can be performed using any target where the relationship between co-polarized channels is known. 
+	 &
+	Requires only a known target. If only crosstalk calibration is needed, no external target is necessary. Shows that crosstalk can be corrected separately from radiometric and imbalance calibration, in this case after the crosstalk calibrations. Using distributed targets that fulfill the assumptions, cross-talk calibration at any range is possible, other methods theoretically require a calibration target at every range.
+	&
+	Reciprocal distortion model may not apply to bistatic systems. X-talk calibration relies on assumptions of uncorrelatedness and good isolation between the channels. A priori knowledge of the distributed targets crosspol. correlation required (e.g from modeling). Iterative solution may have instability or convergence problems. Model uses symmetrized $\mathbf{S}$ matrices, if raw data is available, another method may be better. For imbalance calibration, artificial targets are required at many ranges. \\
+	\hline\\
+	\cite{Klein1992,575928} & Similar to\cite{VanZyl1990}, removes the restriction to symmetrized scattering matrices, but hence the distortion parameters are not bound to be reciprocal. Assumes reciprocal scattering.
+	First perform estimation and removal of cross talk using scene elements. If radiometric and imbalance calibration are desired, they can be performed using trihedral targets.
+	& Imbalance and cross talk fully taken into account. Requires only a trihedral target. Can be applied to Stokes or scattering Matrix data. No target required for just x-talk correction.
+	&Similar limitations as\cite{VanZyl1990}. Reciprocal scattering not guaranteed in case of bistatic system .\\
+	\hline\\
+	\cite{Quegan1994}
+	& As usual, linear distortion in transmission and reception plus noise.
+	The X-talk is assumed to be small so that terms of higher order can be neglected (no multiple x-talk). Reciprocity and co- and crosspolarization uncorrelatedness (azimuthal symmetry) are assumed. The system effects are represented using a single matrix. Using this type of distributed target, it is possible to perform crosstalk and relative RX-TX imbalance calibration without any calibration target. Phase calibration can be performed simultaneously or as a successive step provided we have knowledge of the HH-VV phase difference in some parts of the scene.
+	& Does not require artificial targets. Simultaneous phase and imbalance calibration. Can be applied to both Stokes and scattering matrix data. Unlike \cite{VanZyl1990}, does not need symmetrized data and does not assume a reciprocal system. Shows that the modulus of the true correlation coefficient of the copolarized channels can be measured from uncalibrated data.
+	& Relies on assumptions of uncorrelatedness and reciprocity. Only phase and crosstalk calibration, no imbalance or radiometric correction. Imbalance calibration may be performed using any method presented in \cite{Klein1992,575928,VanZyl1990}\\
+	\hline\\
+	\cite{Sarabandi1992}
+	&Modification of the single target calibration (STCT) \cite{Sarabandi1990} for imaging radars. It takes the point spread function of the imaging system into account, while the conventional methods assume a constant distribution over the illumination area. Provides an explicit form of the calibrated $\mathbf{S}$ matrix given the measured matrix and
+	&Same as \cite{Sarabandi1990}. In addition, considers the effect of the PSF on the pixel statistics. Having a single target simplifies the placement, since usually all the targets must be in the same range line.
+	&Same as \cite{Sarabandi1990}. Since the antenna pattern depends on range, needs an array of targets spread over the range. Requires knowledge of the ambiguity function. \\
+	\hline\\
+	\cite{Sarabandi1994}
+	&Another attempt at considering the point spread for polarimetric calibration. Introduces the differential Mueller matrix. Uses a distributed homogeneous target for calibration.
+	&Considers the effect of the PSF. Does not need external targets.
+	&Requires an homogeneous distributed target with known covariance matrix. Accurate algebraic solution is very difficult.
+	\\
+	\hline\\
+	\cite{Freeman1992}&Uses the usual linear distortion model with full transmit and receive distortion matrices with first order crosstalk. Using the uncorrelatedness between like- and cross- pol. for natural targets, no external target is needed for x-talk calibration. Unlike Klein\cite{Klein1992}, does not assume reciprocity, but the data has to be symmetrized.
+	&Can be used on Stokes or scattering Matrix data. No external targets necessary
+	&Requires to symmetrize data. Loss of information for nonreciprocal scatterers.\\
+	\hline\\
+	
+	\cite{Zebker1987}
+	&A simple phase calibration procedure is illustrated. Assuming reciprocity and Bragg scattering, the copolarized phases are equal and can be used to determine the other phases. Amplitude calibration is achieved by injecting a known signal in the receive line.
+	&Simplicity, no need for external targets.
+	&Needs a surface where the copolarized phases are equal. Only phase calibration, amplitude calibration requires a external source. Reciprocity may be a problem for bistatic radars.
+	\\
+	\hline\\
+	\cite{Loch-Duplex1996}&
+	Bases on linear distortion model. Similarly to STCT or GTCT, uses artificial targets for calibration. Assumes high crosspolarization insulation. Extracts imbalance magnitude and phase from trihedral and one rotated dihedral targets.
+	& Simple, does not rely on assumptions about targets. Needs only two targets
+	& No crosstalk calibration since good isolation is assumed. Needs lab calibration to determine absolute $HH$ gain.
+	&
+	1 dB, $5^{\circ}$ 
+	\\
+	\hline
+	\cite{Whitt1990}&
+	Uses linear distortion model. Obtain the distortion matrices with three measurements of targets, one of which with a scattering matrix which is a multiple of the identity matrix. A sphere is the preferred target. Calibration is performed with respect to the unknown polarization state obtained when the v-polarization is transmitted. Using a fourth nondepolarizing target, it is possible to determine the unknown polarization state.
+	&
+	Simple, only one target must be of the special form. Insensitive to orientation.
+	&
+	Calibration only relative to the transmit basis. If the polarization isolation is not high enough, needs additional target with $s_{vv} \neq s_{hh}$, such as cylinder, to determine the transmit pol. state.
+	&
+	0.2 dB\\
+	\hline\\
+	\cite{2007}&
+	Distortion model similar to \cite{Sarabandi1994}. To solve for the distortion parameters, a genetic algorithm is used.
+	& Only a distributed target with known covariance matrix. Results may be more stable than algebraic procedures.
+	& Complex model, requires knowledge of the ambiguity function. Need to implement a genetic algorithm for complex quantities.\\
+	\hline\\
+	\cite{1610834}&
+	Solves the nonlinear crosstalk and imbalance calibration problem using a numerical algorithm using only the constraint of reciprocity. Calibration is shown to be consistent: calibration of already calibrated data does not change it. 
+	&
+	Does not require external target. Especially suitable because all passive targets are reciprocal and not other assumption is made.
+	& 
+	No radiometric calibration.
+	Not suited for a bistatic system because of the reciprocity constraint. May work for small bistatic angles, as they are almost reciprocal.  As pointed out \cite{6191317}, the radar was assumed to be non-reciprocal but the estimated x-talks are related in way inconsistent with this assumption.\\
+	\hline\\
+	\cite{4241478}&
+	Assume scattering reciprocity and uncorrelated noise between the channels. Using at least three non-overlapping azimuth looks (producing uncorrelated scattering) per range line to obtain more measurements and assuming the distortion parameters do not change over the looks, numerically solve a system of equation for the distortion parameters. To initialize the solution, Queagans\cite{Quegan1994} method is used.
+	& Regions where Quegans assumption do not hold, are not corrected using the same parameters for regions where it does. This avoid introducing unwanted distortion (imposing a model on the data).
+	&Same as \cite{Quegan1994}\\
+	\hline\\
+	\cite{322577}&
+	Assuming a multivariate Gaussian distribution of the SLC data and the usual distortion model, a system of equation is obtained for the measurement. This equation is solved for sub-images, which should be taken to be wider in azimuth than in range because of the variability of the calibration coefficients with range. To have enough equations and being able to solve for all the variables, some constraints are needed.
+	& No external targets. Jointly compensates distortions and Faraday rotation (not an issue in ground-based Ku band?). Additional assumption can be chosen quite freely depending on the situation. Good theoretical determination of the calibration coefficients (-30 dB residual distortion)
+	& Gaussian assumption may not apply. Numerical solution may be unstable. Never tested on real data.
+	\\
+	\hline
+	\cite{35960}&
+	Treats the relative phase calibration only. Assuming zero crosstalk and uncorrelatedness between co- and crosspolarized channels for distributed targets, it is possible perform a phase calibration on the measured scattering matrix. Another possibility is to employ clutter statistics to perform phase calibration: it is assumed that the copolarized channels are correlated and the crosspolarized too. Using the fact that like and crosspolarized channels are not correlated and neglecting coupling, it is possible to determine the phase correction angles.
+	& Simple and direct method to perform phase calibration. Not iterative, so a solution is guaranteed.
+	Interesting for the discussion of the spatial variation of phase calibration due to the small baseline between the H and the V antenna.
+	& No crosstalk correction. As shown by \cite{Quegan1994}, phase calibration cannot be completely decoupled from imbalance/x-talk correction.\\
+	\hline
+\end{longtable}
+\end{landscape}
+\subsection{Spatial Phase Variation}
+Because of the small separation between the vertical and the horizontal receiving antennas, when observing the phase of $\sigma_{HHVV}$ (possibly after crosstalk compensation) we will observe a phase contribution which is not due to the scattering but to the baseline $\mathbf{B_{HV}}$ between the antennas. This phase contribution is given, at least in a first approximation as:
+\begin{equation}
+	\phi_{HHVV} = \phi_{HHVV}^{pol} + \frac{4 \pi}{\lambda} \left(\mathbf{B_{HV}} \cdot \frac{\mathbf{R}}{\abs{\mathbf{R}}} \right).
+\end{equation}
+Where $\mathbf{R}$ is the vector connecting the center of the radar to the target. Given the knowledge of the precise position of the radar system and a DEM of the imaged terrain, it should be possible to compute the $\mathbf{R}$ vector to every image element thus constructing a synthetic interferogram and then subtracting the phase from the measured phase.\footnote{The DEM can be generated by using the HH or VV interferometric baseline. In alternative, it is possible to use an external  DEM.} This process is akin to the so called \emph{zero baseline steering} as defined by Ferretti\cite{898661}, the main difference being that in this case we compensate for the baseline between two different polarimetric channels.
+\bibliographystyle{IEEEtran}
+\bibliography{/home/baffelli/Literature/literature.bib}{}
+
+\end{document}
