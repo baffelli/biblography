@@ -12,10 +12,10 @@
 \usepackage{rotating}
 \usepackage[section]{placeins}
 \usepackage{cite}
-\usepackage{macros}
+%\usepackage{macros}
 \usepackage{longtable}
 %%%%%%%%%%%Commands
-
+\input{macros.tex}
 \begin{document}
 
 \maketitle
@@ -278,7 +278,7 @@ The combination of values of entropy and anisotropy and their interpretation are
 		\hline
 		$\lambda_{1}$ & $\lambda_{2}$ & $H_{w}$ & $A_{w}$ & DoP\\
 		$\lambda_{1} \geq 0$ & $0$ & $0$ & $1$ & $1$\\
-		$\neq \lambda_{2}$ & $\lambda_{2}\geq 0$ & $\between{0}{H_{w}}{1}$ & $\between{0}{A_{w}}{1}$ & $\between{0}{\mathrm{DoP}}{1}$	\\
+		$\neq \lambda_{2}$ & $\lambda_{2}\geq 0$ & $\btw{0}{H_{w}}{1}$ & $\btw{0}{A_{w}}{1}$ & $\btw{0}{\mathrm{DoP}}{1}$	\\
 		\multicolumn{2}{c}{$\lambda_{1} = \lambda_{2}$} & 1 & 0 & 0\\
 		\hline
 	\end{tabular}
