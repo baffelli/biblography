@@ -6,7 +6,7 @@
 \newcommand{\btw}[3]{#1 \leq #2 \leq #3}
 \newcommand{\compmat}[1]{\mathbf{\underline{#1}}}
 \newcommand{\deriv}[2]{\frac{\partial#1}{\partial#2}}
-\newcommand{\expect}[1]{E\left[#1\right]}
+\newcommand{\expect}[1]{\mathop{\mathbb{E}}\left[#1\right]}
 \newenvironment{myproof}{\proof\mbox{}\\*}{\endproof}
 \newcommand{\mat}[1]{\mathbf{#1}}
 \newcommand{\bilinear}[3]{{#1}^{T}#2#3}
@@ -15,3 +15,4 @@
 \newcommand\normdist[2]{N\left(#1, #2\right)}
 \newcommand\state[3]{{#1}_{#2\vert#3}}
 \newcommand\posterior[2]{\state{#1}{#2}{#2}}
+\newcommand{\var}[1]{\mathop{Var\left[#1\right]}}
